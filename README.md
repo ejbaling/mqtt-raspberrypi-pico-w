@@ -10,3 +10,4 @@ References:
 * https://core-electronics.com.au/guides/getting-started-with-mqtt-on-raspberry-pi-pico-w-connect-to-the-internet-of-things/
 * https://stfn.pl/blog/22-pico-battery-level/
 * https://www.youtube.com/watch?v=vO_2XWJDF70&ab_channel=CrazyCoupleDIY
+* https://www.youtube.com/watch?v=mj2kMD0LCR4&ab_channel=CoreElectronics
