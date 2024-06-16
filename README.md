@@ -6,20 +6,8 @@ Development IDE: Thonny (thonny.org)
 ## Setup:
 * Add and configure the MQTT broker in Home Assistant.
 
-## secrets.json
-A file in the project's root directory that stores clear text credentials such as username, password and wifi access. Not in github, saved in computer and the board. Create a separate credentials for use in this project, do not use your existing credentials.
-
-`{
-  "mqtt": {
-    "host": "10.0.0.120",
-    "username": "mqtt-user",
-    "password": "Ng7tov!KhVv3"
-  },
-  "wifi": {
-    "ssid": "SPARK-U77QV8",
-    "password": "DFLEE6YMVV"
-  }
-}`
+## Wiki
+https://github.com/ejbaling/mqtt-raspberrypi-pico-w/wiki
 
 ## References:
 * https://core-electronics.com.au/guides/getting-started-with-mqtt-on-raspberry-pi-pico-w-connect-to-the-internet-of-things/
