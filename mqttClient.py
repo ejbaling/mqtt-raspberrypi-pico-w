@@ -55,7 +55,7 @@ try:
         mqtt_client.publish(mqtt_publish_topic, str(sine))
         
         led.value(1)
-        time.sleep(3)
+        time.sleep(2)
         led.value(0)
         
         # Delay a bit to avoid hitting the rate limit
@@ -64,3 +64,4 @@ except Exception as e:
     print(f'Failed to publish message: {e}')
 finally:
     mqtt_client.disconnect()
+    led.value(0)
