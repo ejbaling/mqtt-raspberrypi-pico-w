@@ -1,8 +1,11 @@
 import network
 import time
 import ujson
+import machine
 from math import sin
 from umqtt.simple import MQTTClient
+
+led = machine.Pin("LED", machine.Pin.OUT)
 
 with open('secrets.json') as fp:
     secrets = ujson.loads(fp.read())
@@ -50,6 +53,10 @@ try:
         # Publish the data to the topic!
         print(f'Publish {sine:.2f}')
         mqtt_client.publish(mqtt_publish_topic, str(sine))
+        
+        led.value(1)
+        time.sleep(3)
+        led.value(0)
         
         # Delay a bit to avoid hitting the rate limit
         time.sleep(3)
