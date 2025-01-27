@@ -1,6 +1,0 @@
-projectKey=mqtt-raspberrypi-pico-w
-serverUrl=https://sonarqube.tailc2bda.ts.net
-serverVersion=10.7.0.96327
-dashboardUrl=https://sonarqube.tailc2bda.ts.net/dashboard?id=mqtt-raspberrypi-pico-w
-ceTaskId=efa43ddd-2562-428b-bd6c-2cc7f05d19f4
-ceTaskUrl=https://sonarqube.tailc2bda.ts.net/api/ce/task?id=efa43ddd-2562-428b-bd6c-2cc7f05d19f4
