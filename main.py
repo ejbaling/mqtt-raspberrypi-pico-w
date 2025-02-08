@@ -96,7 +96,6 @@ while True:
         if wlan.isconnected() == True:
             print("Connected to WiFi")
         try:
-            mqtt_client.disconnect()
             mqtt_client = connect_to_mqtt(mqtt_client_id, mqtt_host, mqtt_username, mqtt_password)
             time.sleep(1)
         except Exception as e:
@@ -105,5 +104,4 @@ while True:
         # Delay a bit to avoid hitting the rate limit
         time.sleep(3)
         
-
 
