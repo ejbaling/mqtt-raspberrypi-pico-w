@@ -5,6 +5,10 @@ import machine
 from math import sin
 from umqtt.simple import MQTTClient
 from machine import ADC
+from machine import Pin
+import utime
+trigger = Pin(20, Pin.OUT)
+echo = Pin(21, Pin.IN)
 
 # Internal temperature sensor is connected to ADC channel 4
 temp_sensor = ADC(4)
@@ -73,6 +77,21 @@ while True:
         
         # Publish the data to the topic!
         mqtt_client.publish(mqtt_publish_topic, str(temperatureC))
+        
+        # Get tank water level
+        trigger.low()
+        utime.sleep_us(2)
+        trigger.high()
+        utime.sleep_us(5)
+        trigger.low()
+        while echo.value() == 0:
+           signaloff = utime.ticks_us()
+        while echo.value() == 1:
+           signalon = utime.ticks_us()
+        timepassed = signalon - signaloff
+        distance = (timepassed * 0.0343) / 2
+        print("The distance from object is ",distance,"cm")
+        mqtt_client.publish("/sh/water-distance", str(distance))
         
         led.value(1)
         time.sleep(2)
