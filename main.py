@@ -63,7 +63,7 @@ mqtt_publish_topic = "/sh/water-pump"  # The MQTT topic for your broker in Home 
 
 # Enter a random ID for this MQTT Client
 # It needs to be globally unique across all of Adafruit IO.
-mqtt_client_id = "somethingreallyrandomandunique123"
+mqtt_client_id = "iloilo-rpi-pico-w"
 
 mqtt_client = connect_to_mqtt(mqtt_client_id, mqtt_host, mqtt_username, mqtt_password)
 
@@ -79,19 +79,20 @@ while True:
         mqtt_client.publish(mqtt_publish_topic, str(temperatureC))
         
         # Get tank water level
-        trigger.low()
-        utime.sleep_us(2)
-        trigger.high()
-        utime.sleep_us(5)
-        trigger.low()
-        while echo.value() == 0:
-           signaloff = utime.ticks_us()
-        while echo.value() == 1:
-           signalon = utime.ticks_us()
-        timepassed = signalon - signaloff
-        distance = (timepassed * 0.0343) / 2
-        print("The distance from object is ",distance,"cm")
-        mqtt_client.publish("/sh/water-distance", str(distance))
+        #trigger.low()
+        #utime.sleep_us(2)
+        #trigger.high()
+        #utime.sleep_us(5)
+        #trigger.low()
+        #while echo.value() == 0:
+        #   signaloff = utime.ticks_us()
+        #while echo.value() == 1:
+        #   signalon = utime.ticks_us()
+        #timepassed = signalon - signaloff
+        #distance = (timepassed * 0.0343) / 2
+        #print("The distance from object is ",distance,"cm")
+        #mqtt_client.publish("/sh/water-distance", str(distance))
+        mqtt_client.publish("/sh/water-distance", "")
         
         led.value(1)
         time.sleep(2)
