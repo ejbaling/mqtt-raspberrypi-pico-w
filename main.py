@@ -1,3 +1,4 @@
+import json
 import network
 import time
 import ujson
@@ -91,7 +92,7 @@ while True:
         timepassed = signalon - signaloff
         distance = (timepassed * 0.0343) / 2
         print("The distance from object is ",distance,"cm")
-        mqtt_client.publish("/sh/water-distance", str(distance))
+        mqtt_client.publish("/sh/water-distance", json.dumps({"ClientId": mqtt_client_id, "Distance": distance, "Unit": "cm"}))
         
         led.value(1)
         time.sleep(2)
