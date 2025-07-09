@@ -48,13 +48,32 @@ with open('secrets.json') as fp:
 wifi_ssid = secrets['wifi']['ssid']
 wifi_password = secrets['wifi']['password']
 
-# Connect to WiFi
+# Connect to WiFi (loop indefinitely until connected)
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
-wlan.connect(wifi_ssid, wifi_password)
-while wlan.isconnected() == False:
-    print('Waiting for connection...')
-    time.sleep(1)
+while (wlan.isconnected() == False):
+    print('Attempting to connect to WiFi...')
+    try:
+        wlan.connect(wifi_ssid, wifi_password)
+    except Exception as e:
+        print(f"WiFi connect exception: {e}")
+
+    # Wait up to 10 seconds for connection
+    for _ in range(10):
+        if wlan.isconnected() == True:
+            break
+        time.sleep(1)
+    
+    if wlan.isconnected() == False:
+        print('WiFi not connected, retrying...')
+        # Disconnect to reset state before next attempt
+        try:
+            wlan.disconnect()
+        except Exception as e:
+            print(f"WiFi disconnect exception: {e}")
+
+        time.sleep(5)  # Always wait before next attempt
+        
 print("Connected to WiFi")
 
 mqtt_host = secrets['mqtt']['host']
@@ -66,7 +85,8 @@ mqtt_publish_topic = "/sh/water-pump"  # The MQTT topic for your broker in Home 
 # It needs to be globally unique across all of Adafruit IO.
 mqtt_client_id = "somethingreallyrandomandunique123"
 
-mqtt_client = connect_to_mqtt(mqtt_client_id, mqtt_host, mqtt_username, mqtt_password)
+if wlan.isconnected() == True:
+    mqtt_client = connect_to_mqtt(mqtt_client_id, mqtt_host, mqtt_username, mqtt_password)
 
 while True:
     try:
@@ -108,7 +128,7 @@ while True:
             print(f'Failed to connect to WiFi: {e}')
         
         count = 0
-        while (wlan.isconnected() == False) & (count != 10):
+        while (wlan.isconnected() == False) and (count != 10):
             print('Waiting for connection...')
             count+=1
             print(f'count: {count}')
