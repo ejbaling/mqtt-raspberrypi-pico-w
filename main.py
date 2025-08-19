@@ -83,7 +83,7 @@ mqtt_publish_topic = "/sh/water-pump"  # The MQTT topic for your broker in Home 
 
 # Enter a random ID for this MQTT Client
 # It needs to be globally unique across all of Adafruit IO.
-mqtt_client_id = "somethingreallyrandomandunique123"
+mqtt_client_id = "redwood-iloilo"
 
 if wlan.isconnected() == True:
     mqtt_client = connect_to_mqtt(mqtt_client_id, mqtt_host, mqtt_username, mqtt_password)
