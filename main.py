@@ -99,18 +99,39 @@ while True:
         # Publish the data to the topic!
         mqtt_client.publish(mqtt_publish_topic, str(temperatureC))
         
-        # Get tank water level
+        # Get tank water level - ADD TIMEOUT PROTECTION
         trigger.low()
         utime.sleep_us(2)
         trigger.high()
         utime.sleep_us(5)
         trigger.low()
+        
+        # Timeout protection for echo start (CRITICAL FIX)
+        timeout_start = utime.ticks_us()
+        distance = -1  # Default to error value
+        
+        timeout_occurred = False
         while echo.value() == 0:
-           signaloff = utime.ticks_us()
-        while echo.value() == 1:
-           signalon = utime.ticks_us()
-        timepassed = signalon - signaloff
-        distance = (timepassed * 0.0343) / 2
+            signaloff = utime.ticks_us()
+            if utime.ticks_diff(signaloff, timeout_start) > 30000:  # 30ms timeout
+                print("Ultrasonic timeout - no echo")
+                timeout_occurred = True
+                break
+                
+        if not timeout_occurred:
+            # Timeout protection for echo end (CRITICAL FIX)
+            timeout_start = utime.ticks_us()
+            while echo.value() == 1:
+                signalon = utime.ticks_us()
+                if utime.ticks_diff(signalon, timeout_start) > 30000:  # 30ms timeout
+                    print("Ultrasonic timeout - echo stuck high")
+                    timeout_occurred = True
+                    break
+                    
+            if not timeout_occurred:
+                timepassed = signalon - signaloff
+                distance = (timepassed * 0.0343) / 2
+        
         print("The distance from object is ",distance,"cm")
         mqtt_client.publish("/sh/water-distance", json.dumps({"ClientId": mqtt_client_id, "Distance": distance, "Unit": "cm"}))
         
@@ -136,6 +157,11 @@ while True:
         if wlan.isconnected() == True:
             print("Connected to WiFi")
         try:
+            # FIX: Disconnect old MQTT client before creating new one
+            try:
+                mqtt_client.disconnect()
+            except:
+                pass
             mqtt_client = connect_to_mqtt(mqtt_client_id, mqtt_host, mqtt_username, mqtt_password)
             time.sleep(1)
         except Exception as e:
@@ -143,5 +169,5 @@ while True:
     finally:
         # Delay a bit to avoid hitting the rate limit
         time.sleep(3)
-        
+
 
