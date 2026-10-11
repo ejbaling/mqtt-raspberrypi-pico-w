@@ -83,7 +83,8 @@ mqtt_publish_topic = "/sh/water-pump"  # The MQTT topic for your broker in Home 
 
 # Enter a random ID for this MQTT Client
 # It needs to be globally unique across all of Adafruit IO.
-mqtt_client_id = "redwood-iloilo"
+mqtt_client_id = secrets['mqtt']['clientid']
+mqtt_tank_id = secrets['mqtt']['tankid']
 
 if wlan.isconnected() == True:
     mqtt_client = connect_to_mqtt(mqtt_client_id, mqtt_host, mqtt_username, mqtt_password)
@@ -133,7 +134,7 @@ while True:
                 distance = (timepassed * 0.0343) / 2
         
         print("The distance from object is ",distance,"cm")
-        mqtt_client.publish("/sh/water-distance", json.dumps({"ClientId": mqtt_client_id, "Distance": distance, "Unit": "cm"}))
+        mqtt_client.publish("/sh/water-distance", json.dumps({"ClientId": mqtt_client_id, "TankId": mqtt_tank_id, "Distance": distance, "Unit": "cm"}))
         
         led.value(1)
         time.sleep(2)
